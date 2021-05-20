@@ -5,7 +5,9 @@ const imgUser = document.getElementById("imgUser");
 const roomTopic = document.getElementById('pTopic')
 const gridAttendees = document.getElementById('gridAttendees')
 const gridSpeakers = document.getElementById('gridSpeakers')
-
+const btnClipBoard = document.getElementById('btnClipBoard')
+const btnMicrophone = document.getElementById('btnMicrophone')
+const btnClap = document.getElementById('btnClap')
 
 export class View {
    
@@ -30,6 +32,37 @@ export class View {
     static removeItemFromGrid(id){
           const existingElement = View._getExistingItemOnGrid({id})
           existingElement?.remove()
+    }
+
+    static showUserFeatures(isSpeaker){
+        if(!isSpeaker){
+           btnMicrophone.classList.add('hidden')
+           btnClipBoard.classList.add('hidden')
+           btnClap.classList.remove('hidden')
+           return
+        }
+        btnClap.classList.add('hidden')
+        btnMicrophone.classList.remove('hidden')
+        btnClipBoard.classList.remove('hidden')
+        
+    }
+    static _createAudioElement({muted=true, srcObject}){
+        const audio = document.createElement('audio')
+        audio.muted = muted;
+        audio.srcObject = srcObject;
+        audio.addEventListener('loadedmetadata', async()=>{
+            try{
+                await audio.play()
+            }
+            catch(error){
+                console.error('error to play', error)
+            }
+        })
+        return audio;
+    }
+   
+    static renderAudioElement({callerId, stream,isCurrentId }){
+         View._createAudioElement({muted: isCurrentId, srcObject: stream})
     }
 
     static addAttendeeOnGrid(item, removeFirst = false){
