@@ -24,5 +24,14 @@ export const constants = {
     pages:{
         lobby: '/pages/lobby',
         login: '/pages/login',
-    }
+    },
+    firebaseConfig:{
+        apiKey: "AIzaSyCllj_UzmRfZ4KqA00-yy9qffjSjCqZlfc",
+        authDomain: "semana-jsexpert.firebaseapp.com",
+        projectId: "semana-jsexpert",
+        storageBucket: "semana-jsexpert.appspot.com",
+        messagingSenderId: "919700387947",
+        appId: "1:919700387947:web:a19b80b9082940d819192e"
+      },
+      storageKey: 'jsexpert:storage:user'
 }

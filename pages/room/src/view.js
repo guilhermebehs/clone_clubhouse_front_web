@@ -136,4 +136,9 @@ export class View {
             command()
         })
      }
+
+     static redirectToLogin(){
+        window.location = constants.pages.login
+    }
+
 }

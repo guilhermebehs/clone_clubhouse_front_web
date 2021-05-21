@@ -1,3 +1,4 @@
+import { constants } from "../../_shared/constants.js";
 import { Room } from "./entities/room.js";
 import { getTemplate } from "./templates/lobbyItem.js";
 
@@ -52,6 +53,10 @@ export class View{
     static updateUserImage({img, username}){
         imgUser.src = img;
         imgUser.alt = username;
+    }
+
+    static redirectToLogin(){
+        window.location = constants.pages.login
     }
 
 }
