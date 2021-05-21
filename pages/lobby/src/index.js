@@ -20,4 +20,6 @@ const dependencies = {
     user,
 }
 
-await LobbyController.initialize(dependencies)
+await LobbyController
+               .initialize(dependencies)
+               .catch(error => alert(error.message))

@@ -28,8 +28,23 @@ export class RoomController {
   }
 
   _setupViewEvents() {
+    this.view.configureClapButton(this.onClapPressed());
+    this.view.configureLeaveButton();
+    this.view.configureOnMicActivatedButton(this.onMicActivatedButton())
     this.view.updateUserImage(this.roomInfo.user);
     this.view.updateRoomTopic(this.roomInfo.room);
+  }
+
+  onMicActivatedButton(){
+    return async()=>{
+      await this.roomService.toggleAudioActivate()
+    }
+}
+
+  onClapPressed(){
+      return ()=>{
+        this.socket.emit(constants.events.SPEAK_REQUEST, this.roomInfo.user)
+      }
   }
 
   _setupSocket() {
@@ -38,7 +53,16 @@ export class RoomController {
       .setOnUserDisconnected(this.onUserDisconnected())
       .setOnRoomUpdated(this.onRoomUpdated())
       .setOnUserProfileUpgrade(this.onUserProfileUpgrade())
+      .setOnSpeakRequested(this.onSpeakRequested())
       .build();
+  }
+
+  onSpeakRequested() {
+    return (data) => {
+      const attendee = new Attendee(data)
+      const result = prompt(`${attendee.username} pediu para falar!, aceitar 1 sim, 0 não`)
+      this.socket.emit(constants.events.SPEAK_ANSWER, {answer: !!Number(result), user:attendee})
+    }
   }
 
   async _setupWebRTC() {
@@ -53,7 +77,6 @@ export class RoomController {
 
     onCallError(){
         return (call, error)=>{
-             console.log('error', error)
              const peerId = call.peer;
              this.roomService.disconnectPeer({peerId})
            }
@@ -80,9 +103,7 @@ export class RoomController {
 
     onCallReceived(){
       return async(call)=>{
-             const stream = this.roomService.getCurrentStream()
-             console.log(stream)
-             console.log('answering',call)
+             const stream = await this.roomService.getCurrentStream()
              call.answer(stream)
       }
     }
@@ -95,7 +116,6 @@ export class RoomController {
 
   onPeerConnectionOpened() {
     return (peer) => {
-      console.log('peer', peer);
       this.roomInfo.user.peerId = peer.id;
       this.socket.emit(constants.events.JOIN_ROOM, this.roomInfo);
     };
@@ -104,8 +124,8 @@ export class RoomController {
   onUserProfileUpgrade() {
     return (data) => {
       const attendee = new Attendee(data);
-      this.roomService.updateUserPermission(attendee)
       if (attendee.isSpeaker) {
+        this.roomService.updateUserPermission(attendee)
         this.view.addAttendeeOnGrid(attendee, true);
       }
       this.activateUserFeatures()
@@ -118,14 +138,12 @@ export class RoomController {
       this.view.updateAttendeesOnGrid(users);
       this.roomService.updateCurrentUserProfile(users);
       this.activateUserFeatures()
-      console.log('room list!', users);
     };
   }
 
   onUserDisconnected() {
     return (data) => {
       const attendee = new Attendee(data);
-      console.log(`${attendee.username} disconnected!`);
       this.view.removeItemFromGrid(attendee.id);
       const peerId = attendee.peer;
       this.roomService.disconnectPeer({peerId})
@@ -136,7 +154,6 @@ export class RoomController {
     return (user) => {
       this.view.addAttendeeOnGrid(user);
       //vamos ligar!!
-      console.log("onUserConnected")
       this.roomService.callNewUser(user)
     };
   }

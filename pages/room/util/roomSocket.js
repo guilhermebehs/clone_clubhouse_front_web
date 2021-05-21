@@ -8,6 +8,8 @@ export class RoomSocketBuilder extends SocketBuilder{
         super({socketUrl, namespace})
         this.onRoomUpdated = ()=>{}
         this.onUserProfileUpgrade = ()=>{}
+        this.onSpeakRequested = ()=>{}
+        this.onSpeakAnswered = ()=>{}
     }
 
     setOnRoomUpdated(fn){
@@ -20,10 +22,21 @@ export class RoomSocketBuilder extends SocketBuilder{
         return this;
    }
 
+   setOnSpeakRequested(fn){
+       this.onSpeakRequested = fn;
+       return this;
+   }
+
+   setOnSpeakAnswered(fn){
+    this.onSpeakAnswered = fn;
+    return this;
+   }
+
     build(){
         const socket = super.build()
         socket.on(constants.events.LOBBY_UPDATED, this.onRoomUpdated)
         socket.on(constants.events.UPGRADE_USER_PERMISSION, this.onUserProfileUpgrade)
+        socket.on(constants.events.SPEAK_REQUEST, this.onSpeakRequested)
         return socket;
     }
 }

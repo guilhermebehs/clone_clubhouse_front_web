@@ -34,7 +34,6 @@ export class SocketBuilder{
         const socket = globalThis.io.connect(this.socketUrl, {
             withCredentials: false,
         })
-        socket.on('connect', ()=> console.log('conectei!!!'))
         socket.on(constants.events.USER_CONNECTED, this.onUserConnected )
         socket.on(constants.events.USER_DISCONNECTED, this.onUserDisconnected)
         socket.on(constants.events.LOBBY_UPDATED, this.onRoomUpdated)

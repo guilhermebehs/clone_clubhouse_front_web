@@ -1,5 +1,5 @@
 export const constants = {
-    socketUrl: 'localhost:3000',
+    socketUrl: '192.168.3.109:3000',
     socketNamespaces:{
         room: 'room',
         lobby: 'lobby',
@@ -18,5 +18,11 @@ export const constants = {
         JOIN_ROOM: 'joinRoom',
         LOBBY_UPDATED: 'lobbyUpdated',
         UPGRADE_USER_PERMISSION: 'upgradeUserPermission',
+        SPEAK_REQUEST: 'speakRequest',
+        SPEAK_ANSWER: 'speakAnswer',
+    },
+    pages:{
+        lobby: '/pages/lobby',
+        login: '/pages/login',
     }
 }
