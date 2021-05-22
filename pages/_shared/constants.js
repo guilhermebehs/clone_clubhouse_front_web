@@ -1,6 +1,5 @@
 export const constants = {
-  socketUrl: '192.168.3.109:3000',
-  // socketUrl: 'https://clubhouse-back.herokuapp.com/',
+  // socketUrl: 'localhost:3000',
   socketNamespaces: {
     room: 'room',
     lobby: 'lobby',
