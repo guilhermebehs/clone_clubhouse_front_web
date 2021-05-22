@@ -1,6 +1,6 @@
-export class UserStream{
-    constructor({stream, isFake}){
-        this.stream = stream;
-        this.isFake = isFake;
-    }
+export class UserStream {
+  constructor({ stream, isFake }) {
+    this.stream = stream;
+    this.isFake = isFake;
+  }
 }

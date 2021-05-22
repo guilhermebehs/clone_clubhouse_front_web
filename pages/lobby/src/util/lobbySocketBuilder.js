@@ -1,22 +1,20 @@
-import { constants } from "../../../_shared/constants.js";
-import { SocketBuilder } from "../../../_shared/socketBuilder.js";
+import { constants } from '../../../_shared/constants.js';
+import { SocketBuilder } from '../../../_shared/socketBuilder.js';
 
+export class LobbySocketBuilder extends SocketBuilder {
+  constructor({ socketUrl, namespace }) {
+    super({ socketUrl, namespace });
+    this.onLobbyUpdated = () => {};
+  }
 
-export class LobbySocketBuilder extends SocketBuilder{
+  setOnLobbyUpdated(fn) {
+    this.onLobbyUpdated = fn;
+    return this;
+  }
 
-    constructor({socketUrl, namespace}){
-        super({socketUrl, namespace})
-        this.onLobbyUpdated = ()=>{}
-    }
-
-    setOnLobbyUpdated(fn){
-         this.onLobbyUpdated = fn
-         return this;
-    }
-
-    build(){
-        const socket = super.build()
-        socket.on(constants.events.LOBBY_UPDATED, this.onLobbyUpdated)
-        return socket;
-    }
+  build() {
+    const socket = super.build();
+    socket.on(constants.events.LOBBY_UPDATED, this.onLobbyUpdated);
+    return socket;
+  }
 }

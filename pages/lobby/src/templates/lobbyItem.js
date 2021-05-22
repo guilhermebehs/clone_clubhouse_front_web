@@ -1,22 +1,20 @@
-import { Room } from "../entities/room.js";
+import { Room } from '../entities/room.js';
 
+function createFeaturedSpeakersTemplate(featuredAttendees) {
+  if (!featuredAttendees.length) return '';
 
-function createFeaturedSpeakersTemplate(featuredAttendees){
- if(!featuredAttendees.length) return ''
+  const attendees = featuredAttendees.map((attendee) => {
+    return `<li>${attendee.username} <span role="img" class="emoji">💬</span></li>`;
+  });
 
-   const attendees = featuredAttendees.map((attendee)=>{
-    return `<li>${attendee.username} <span role="img" class="emoji">💬</span></li>`
-   })
-
-   return attendees.join('')
+  return attendees.join('');
 }
 
-export function getTemplate(room = new Room()){
+export function getTemplate(room = new Room()) {
+  const { owner } = room;
 
-    const {owner} = room;
-
-return `
-      <a id=${room.id} href="${room.roomLink || "#"}"></a>
+  return `
+      <a id=${room.id} href="${room.roomLink || '#'}"></a>
         <div class="cards__card">
             <span class="cards__card__topicRoom">
             ${room.subTopic}
@@ -34,7 +32,9 @@ return `
               <ul>
                 ${createFeaturedSpeakersTemplate(room.featuredAttendees)}
                 <span class="cards__card__info__speakers__listeners">
-                    ${room.attendeesCount} <i class="fa fa-user"></i> / ${room.speakersCount}
+                    ${room.attendeesCount} <i class="fa fa-user"></i> / ${
+    room.speakersCount
+  }
                     <i class="fa fa-comment"></i>
                 </span>
              </ul>
@@ -42,5 +42,5 @@ return `
             </div>
         </div>
         </a>
-        `
+        `;
 }

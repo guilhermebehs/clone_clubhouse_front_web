@@ -1,42 +1,43 @@
-import { constants } from "../../_shared/constants.js";
-import { SocketBuilder } from "../../_shared/socketBuilder.js";
+import { constants } from '../../_shared/constants.js';
+import { SocketBuilder } from '../../_shared/socketBuilder.js';
 
+export class RoomSocketBuilder extends SocketBuilder {
+  constructor({ socketUrl, namespace }) {
+    super({ socketUrl, namespace });
+    this.onRoomUpdated = () => {};
+    this.onUserProfileUpgrade = () => {};
+    this.onSpeakRequested = () => {};
+    this.onSpeakAnswered = () => {};
+  }
 
-export class RoomSocketBuilder extends SocketBuilder{
+  setOnRoomUpdated(fn) {
+    this.onRoomUpdated = fn;
+    return this;
+  }
 
-    constructor({socketUrl, namespace}){
-        super({socketUrl, namespace})
-        this.onRoomUpdated = ()=>{}
-        this.onUserProfileUpgrade = ()=>{}
-        this.onSpeakRequested = ()=>{}
-        this.onSpeakAnswered = ()=>{}
-    }
+  setOnUserProfileUpgrade(fn) {
+    this.onUserProfileUpgrade = fn;
+    return this;
+  }
 
-    setOnRoomUpdated(fn){
-         this.onRoomUpdated = fn
-         return this;
-    }
+  setOnSpeakRequested(fn) {
+    this.onSpeakRequested = fn;
+    return this;
+  }
 
-    setOnUserProfileUpgrade(fn){
-        this.onUserProfileUpgrade = fn
-        return this;
-   }
-
-   setOnSpeakRequested(fn){
-       this.onSpeakRequested = fn;
-       return this;
-   }
-
-   setOnSpeakAnswered(fn){
+  setOnSpeakAnswered(fn) {
     this.onSpeakAnswered = fn;
     return this;
-   }
+  }
 
-    build(){
-        const socket = super.build()
-        socket.on(constants.events.LOBBY_UPDATED, this.onRoomUpdated)
-        socket.on(constants.events.UPGRADE_USER_PERMISSION, this.onUserProfileUpgrade)
-        socket.on(constants.events.SPEAK_REQUEST, this.onSpeakRequested)
-        return socket;
-    }
+  build() {
+    const socket = super.build();
+    socket.on(constants.events.LOBBY_UPDATED, this.onRoomUpdated);
+    socket.on(
+      constants.events.UPGRADE_USER_PERMISSION,
+      this.onUserProfileUpgrade,
+    );
+    socket.on(constants.events.SPEAK_REQUEST, this.onSpeakRequested);
+    return socket;
+  }
 }
